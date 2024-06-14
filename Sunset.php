@@ -484,12 +484,18 @@ class Sunset {
             if ( $this->isBefore ) {
                 return false;
             }
+            if( $this->isAfter ) {
+                return true;
+            }
             [$lightingHour,$lightingMinute] = $this->lightingTime();
             return $this->nowHour > $lightingHour || ($this->nowHour == $lightingHour && $this->nowMinute >= $lightingMinute);   
         } 
         if (in_array($hebrewDay, self::HOLIDAY_DAYS_END[$hebrewMonth])) {
             if ( $this->isAfter ) {
                 return false;
+            }
+            if( $this->isBefore ) {
+                return true;
             }
             [$starApperingHour,$starApperingMinute] = $this->starApperingTime();
             return $this->nowHour < $starApperingHour || ($this->nowHour == $starApperingHour && $this->nowMinute < $starApperingMinute);
@@ -499,11 +505,17 @@ class Sunset {
 
     public function isNowShabbat() {
         if ($this->dayOfWeek == 5 && !$this->isBefore) {
+            if ( $this->isAfter ) {
+                return true;
+            }
             [$lightingHour,$lightingMinute] = $this->lightingTime($this->month, $this->dayOfMonth);
             if ($this->nowHour > $lightingHour || ($this->nowHour == $lightingHour && $this->nowMinute >= $lightingMinute)) {
                 return true;
             }
         } elseif($this->dayOfWeek == 6 && !$this->isAfter) {
+            if ( $this->isBefore ) {
+                return true;
+            }
             [$starApperingHour,$starApperingMinute] = $this->starApperingTime($this->month, $this->dayOfMonth);
             if ($this->nowHour < $starApperingHour || ($this->nowHour == $starApperingHour && $this->nowMinute < $starApperingMinute)) {
                 return true;
