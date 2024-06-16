@@ -64,12 +64,18 @@ class Sunset {
     private $unixSunsetTime;
     /** @var bool */
     private $isOutsideEretzIsrael = false;
+    /** @var string */
+    public $cloudFlareData = '';
 
     /**
      * @param DateTime|null $time
      */
     public function __construct(DateTime $time = null) {
-        if(isset($_SERVER) && isset($_SERVER['HTTP_CF_TIMEZONE'])) {
+        if(
+            isset($_SERVER) && 
+            isset( $_SERVER['HTTP_CF_TIMEZONE'] ) && 
+            !empty( $_SERVER['HTTP_CF_TIMEZONE'] ) &&
+            in_array( $_SERVER['HTTP_CF_TIMEZONE'], timezone_identifiers_list() )) {
             $this->timeZoneString = $_SERVER['HTTP_CF_TIMEZONE'];
         }
         $this->timeZone = new DateTimeZone($this->timeZoneString);
@@ -88,14 +94,15 @@ class Sunset {
             $this->isOutsideEretzIsrael = $this->checkIfIsOutsideEretzIsrael();
         }
         $this->calculateDinamicSunset();
+        $this->setCloudFlareData();
     }
 
-    public function getHeaders() {
+    public function setCloudFlareData() {
         // Check if the keys exist before using them
         $timezone = isset($_SERVER['HTTP_CF_TIMEZONE']) ? $_SERVER['HTTP_CF_TIMEZONE'] : 'default_timezone';
         $latitude = isset($_SERVER['HTTP_CF_IPLATITUDE']) ? $_SERVER['HTTP_CF_IPLATITUDE'] : 'default_latitude';
         $longitude = isset($_SERVER['HTTP_CF_IPLONGITUDE']) ? $_SERVER['HTTP_CF_IPLONGITUDE'] : 'default_longitude';
-        return "this timezone string = {$this->timeZoneString} server = {$timezone}, this latitude = {$this->latitude} server = {$latitude}, this longitude = {$this->longitude} server = {$longitude}";
+        $this->cloudFlareData = "this timezone string = {$this->timeZoneString} server = {$timezone}, this latitude = {$this->latitude} server = {$latitude}, this longitude = {$this->longitude} server = {$longitude}";
     }
 
     private function checkIfIsOutsideEretzIsrael() {
