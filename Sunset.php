@@ -119,7 +119,7 @@ class Sunset {
     }
 
     private function calculateDinamicSunset() {
-        $sunInfo = date_sun_info($this->now->getTimestamp(), $this->latitude, $this->longitude);
+        $sunInfo = date_sun_info( strtotime( $this->now->format("Y-m-d") ), $this->latitude, $this->longitude);
         if ($sunInfo === false || !array_key_exists('sunset', $sunInfo) || $sunInfo['sunset'] === false || $sunInfo['sunset'] === true) {
             $this->setTodayDefaultSunset();
             return false;
@@ -137,7 +137,7 @@ class Sunset {
 
     private function setTodayDefaultSunset() {
         // default sunset time for Jerusalem
-        $sunInfo = date_sun_info( time(), 31.7683, 35.2137 );
+        $sunInfo = date_sun_info( strtotime( $this->now->format("Y-m-d") ), 31.7683, 35.2137 );
         if ($sunInfo === false || !array_key_exists('sunset', $sunInfo) || $sunInfo['sunset'] === false || $sunInfo['sunset'] === true) {
             return false;
         }
