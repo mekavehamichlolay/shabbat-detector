@@ -16,18 +16,21 @@ class Sunset {
         1 => [2, 10, 15, 22],
         7 => [15, 21],
         9 => [6],
+        12 => [],
     ];
 
     private const HOLIDAY_FULL_DAYS_IN_CHUL = [
         1 => [15, 22],
         7 => [15, 21],
         9 => [6],
+        12 => [],
     ];
 
     private const HOLIDAY_DAYS_END_IN_CHUL = [
         1 => [16, 23],
         7 => [16, 22],
         9 => [7],
+        12 => [],
     ];
 
     private const BOUNDARIES = [
