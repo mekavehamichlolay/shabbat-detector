@@ -78,7 +78,8 @@ class Sunset {
             isset($_SERVER) && 
             isset( $_SERVER['HTTP_CF_TIMEZONE'] ) && 
             !empty( $_SERVER['HTTP_CF_TIMEZONE'] ) &&
-            in_array( $_SERVER['HTTP_CF_TIMEZONE'], timezone_identifiers_list() )) {
+            in_array( $_SERVER['HTTP_CF_TIMEZONE'], timezone_identifiers_list() ) && 
+            /*this is because techlok is locating all their users in london*/$_SERVER['HTTP_CF_TIMEZONE'] !== 'Europe/London' ) {
             $this->timeZoneString = $_SERVER['HTTP_CF_TIMEZONE'];
         }
         $this->timeZone = new DateTimeZone($this->timeZoneString);
@@ -91,7 +92,8 @@ class Sunset {
         $this->dayOfMonth = (int)$this->now->format("j");
         $this->month = (int)$this->now->format("n");
         $this->unixCurrentTime = $this->now->getTimestamp();
-        if (isset($_SERVER) && isset($_SERVER['HTTP_CF_IPLATITUDE']) && isset($_SERVER['HTTP_CF_IPLONGITUDE'])) {
+        if (isset($_SERVER) && isset($_SERVER['HTTP_CF_IPLATITUDE']) && isset($_SERVER['HTTP_CF_IPLONGITUDE']) && 
+        /* this is because teklok is locating all their users in london*/$_SERVER['HTTP_CF_TIMEZONE'] !== 'Europe/London') {
             $this->latitude = (float)$_SERVER['HTTP_CF_IPLATITUDE'];
             $this->longitude = (float)$_SERVER['HTTP_CF_IPLONGITUDE'];
             $this->isOutsideEretzIsrael = $this->checkIfIsOutsideEretzIsrael();
